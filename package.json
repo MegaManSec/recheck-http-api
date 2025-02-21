@@ -1,0 +1,21 @@
+{
+  "name": "redos-http-api",
+  "version": "0.0.1",
+  "description": "Express endpoint for checking regex expressions against ReDoS vulnerabilities",
+  "main": "app.js",
+  "repository": "https://github.com/MegaManSec/redos-http-api",
+  "author": {
+    "name": "Joshua Rogers"
+  },
+  "homepage": "https://joshua.hu/regex-redos-nginx-gixy",
+  "license": "GPL-3.0",
+  "private": false,
+  "scripts": {
+    "bootstrap": "yarn install --frozen-lock",
+    "start": "node app.js"
+  },
+  "dependencies": {
+    "express": "^4.21.2",
+    "recheck": "^4.4.5"
+  }
+}
