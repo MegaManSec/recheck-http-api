@@ -80,19 +80,20 @@ app.post("/recheck", async (req, res) => {
                 }
 
                 const trimmedValue = pattern.trim();
+                const cacheKey = `${trimmedValue}::${modifier}`;
 
                 if (trimmedValue.length > 1000) {
                     result[key] = null;
                     return;
                 }
 
-                if (cache.has(trimmedValue)) {
-                    result[key] = cache.get(trimmedValue);
+                if (cache.has(cacheKey)) {
+                    result[key] = cache.get(cacheKey);
                 } else {
                     try {
                         const checkResult = await check(trimmedValue, modifier, { timeout: 30000 });
                         if (checkResult["status"] !== "unknown") {
-                            cache.set(trimmedValue, checkResult); // Save to cache only if status is not unknown
+                            cache.set(cacheKey, checkResult); // Save to cache only if status is not unknown
                         }
                         result[key] = checkResult;
                     } catch (error) {
