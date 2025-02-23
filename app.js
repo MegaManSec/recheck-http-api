@@ -11,6 +11,8 @@ const TRIM_CACHE_SIZE = 1000;
 const keepAliveTimeout = 60 * 1000;
 const headersTimeout = 60 * 1000;
 
+const recheckTimeout = 60 * 1000;
+
 const TEXT = `The /recheck endpoint accepts a POST request with Content-Type:
 application/json.
 
@@ -91,7 +93,7 @@ app.post("/recheck", async (req, res) => {
                     result[key] = cache.get(cacheKey);
                 } else {
                     try {
-                        const checkResult = await check(trimmedValue, modifier, { timeout: 30000 });
+                        const checkResult = await check(trimmedValue, modifier, { timeout: recheckTimeout });
                         if (checkResult["status"] !== "unknown") {
                             cache.set(cacheKey, checkResult); // Save to cache only if status is not unknown
                         }

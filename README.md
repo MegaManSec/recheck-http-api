@@ -113,6 +113,7 @@ The following constants can be modified in `app.js`:
 -   `PORT` - The server port (default: `3001`)
 -   `MAX_CACHE_SIZE` - Maximum number of cached regex evaluations (default: `15000`)
 -   `TRIM_CACHE_SIZE` - Number of cache entries to remove when exceeding the limit (default: `1000`)
+-   `recheckTimeout` - Maximum time for each call to recheck's `check()` function before timing out (default: `60 seconds`)
 -   `server.keepAliveTimeout` - Keep-alive timeout for connections (default: `60 seconds`)
 -   `server.headersTimeout` - Header timeout for connections (default: `60 seconds`)
 
