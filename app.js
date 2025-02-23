@@ -14,8 +14,9 @@ const headersTimeout = 60 * 1000;
 const TEXT = `The /recheck endpoint accepts a POST request with Content-Type:
 application/json.
 
-It expects a JSON object where keys are strings and values are regex
-patterns, e.g., {"1": "REGEX", "2": "REGEX2"}. Keys can be anything.
+It expects a JSON object where keys are strings and values are objects
+with "pattern" and "modifier" keys, e.g.
+{"1": {"pattern": "REGEX", "modifier": ""}, "2": {"pattern": "REGEX2", "modifier": "i"}}
 
 Each regex is validated using check() from Recheck
 (https://makenowjust-labs.github.io/recheck/).
@@ -24,7 +25,7 @@ The response is a JSON object where each key maps to the result of
 check().
 
 A maximum of 500 expressions can be checked in a single request.
-The maximum valid single expression length is 1000-characters.
+The maximum valid single expression length is 1000 characters.
 
 If validation fails, the value is null, e.g., {"1": {...}, "2": null}.
 Make sure you check for that.
@@ -38,8 +39,8 @@ app.use(express.json());
 
 app.use(function (err, req, res, next) {
     if (!('stack' in err && err.stack.includes("JSON.parse")))
-        console.error(err.stack)
-    res.status(500).send('Something broke! Invalid JSON?')
+        console.error(err.stack);
+    res.status(500).send('Something broke! Invalid JSON?');
 });
 
 const server = app.listen(PORT, () => {
@@ -60,7 +61,7 @@ app.post("/recheck", async (req, res) => {
     const keys = Object.keys(req.body);
 
     if (keys.length > 500) {
-        return res.status(400).json({ error: "Greater than 500 expressions"});
+        return res.status(400).json({ error: "Greater than 500 expressions" });
     }
 
     if (cache.size > MAX_CACHE_SIZE) {
@@ -70,8 +71,15 @@ app.post("/recheck", async (req, res) => {
 
     await Promise.all(
         keys.map(async (key) => {
-            if (Object.hasOwn(req.body, key) && typeof req.body[key] === "string") {
-                const trimmedValue = req.body[key].trim();
+            if (Object.hasOwn(req.body, key) && typeof req.body[key] === "object") {
+                const { pattern, modifier } = req.body[key];
+
+                if (typeof pattern !== "string" || typeof modifier !== "string") {
+                    result[key] = null;
+                    return;
+                }
+
+                const trimmedValue = pattern.trim();
 
                 if (trimmedValue.length > 1000) {
                     result[key] = null;
@@ -82,7 +90,7 @@ app.post("/recheck", async (req, res) => {
                     result[key] = cache.get(trimmedValue);
                 } else {
                     try {
-                        const checkResult = await check(trimmedValue, "", { timeout: 30000 });
+                        const checkResult = await check(trimmedValue, modifier, { timeout: 30000 });
                         if (checkResult["status"] !== "unknown") {
                             cache.set(trimmedValue, checkResult); // Save to cache only if status is not unknown
                         }

@@ -1,4 +1,3 @@
-
 ReDoS HTTP API
 ==============
 
@@ -43,19 +42,20 @@ API Usage
 #### Request
 
 -   Content-Type: `application/json`
--   Body: JSON object where keys are unique identifiers and values are regex patterns.
+-   Body: JSON object where keys are unique identifiers and values are objects containing:
+    -   `pattern` (string): The regular expression pattern.
+    -   `modifier` (string): The regex modifiers (e.g., `i`, `m`, `g`). Can be an empty string.
 -   Maximum of **500** expressions per request.
 
-Example:
+#### Example Request
 
 ```
 {
-  "1": "^(a+)+$",
-  "2": "^[a-z]+$^[a-z]+$^[a-z]+$^[a-z]+$^[a-z]+$ ( ..... over one 1000 characters ...... )",
-  "3": "( ...... very long and slow regular expression, causing a timeout of recheck ...... )",
-  "4": "^not-vulnerable[0-9]*$"
+  "1": {"pattern": "^(a+)+$", "modifier": ""},
+  "2": {"pattern": "^[a-z]+$^[a-z]+$^[a-z]+$^[a-z]+$^[a-z]+$ ( ..... over one 1000 characters ...... )", "modifier": "i"},
+  "3": {"pattern": "(......very long and slow regular expression, causing a timeout of recheck......)", "modifier": ""},
+  "4": {"pattern": "^not-vulnerable[0-9]*$", "modifier": "m"}
 }
-
 ```
 
 #### Response
@@ -63,21 +63,41 @@ Example:
 -   A JSON object mapping the input keys to the results of Recheck's `check()` function.
 -   If a regex is too long (more than 1000 characters) or causes an error, it returns `null`.
 
-Example Response:
+#### Example Response
 
 ```
 {
-  "1": {"source":"^(a|a+)+$","flags":"","complexity":{"type":"exponential","summary":"exponential","isFuzz":false},"status":"vulnerable","attack":{"pattern":"'a' + 'a'.repeat(31) + '\\x00'","string":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\u0000","base":31,"suffix":"\u0000","pumps":[{"prefix":"a","pump":"a","bias":0}]},"checker":"automaton","hotspot":[{"start":4,"end":5,"temperature":"heat"}]},
-  "2": null
-  "3": {"source":"^/social-content-ai/api/v1/generated/(?<type>temp|((?<category>image|design-template|video|video-content|mail/exclusive)))(?<path>(/[^/]+)*)/(?<filename>[^/]+)\\.(?<extension>[^/]+)$","flags":"","checker":"automaton","error":{"kind":"timeout"},"status":"unknown"},
-  "4": {"source":"^not-vulnerable[0-9]*$","flags":"","checker":"automaton","complexity":{"type":"linear","summary":"linear","isFuzz":false},"status":"safe"}
+  "1": {
+    "source": "^(a|a+)+$",
+    "flags": "",
+    "complexity": {"type": "exponential", "summary": "exponential", "isFuzz": false},
+    "status": "vulnerable",
+    "attack": {"pattern": "'a' + 'a'.repeat(31) + '\\x00'", "string": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\u0000", "base": 31, "suffix": "\u0000", "pumps": [{"prefix": "a", "pump": "a", "bias": 0}]},
+    "checker": "automaton",
+    "hotspot": [{"start": 4, "end": 5, "temperature": "heat"}]
+  },
+  "2": null,
+  "3": {
+    "source": "some-very-long-regex",
+    "flags": "",
+    "checker": "automaton",
+    "error": {"kind": "timeout"},
+    "status": "unknown"
+  },
+  "4": {
+    "source": "^not-vulnerable[0-9]*$",
+    "flags": "m",
+    "checker": "automaton",
+    "complexity": {"type": "linear", "summary": "linear", "isFuzz": false},
+    "status": "safe"
+  }
 }
 ```
 
-
 Ensure that you handle every case of the return value of recheck, including the three status types: [safe, vulnerable, and unknown](https://makenowjust-labs.github.io/recheck/docs/usage/diagnostics/).
 
-#### Error Handling
+Error Handling
+--------------
 
 -   **Invalid JSON** → `400 Bad Request`
 -   **More than 500 expressions** → `400 Bad Request`
