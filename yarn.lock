@@ -390,6 +390,21 @@ recheck-jar@4.4.5:
   resolved "https://registry.npmjs.org/recheck-jar/-/recheck-jar-4.4.5.tgz"
   integrity sha512-a2kMzcfr+ntT0bObNLY22EUNV6Z6WeZ+DybRmPOUXVWzGcqhRcrK74tpgrYt3FdzTlSh85pqoryAPmrNkwLc0g==
 
+recheck-linux-x64@4.4.5:
+  version "4.4.5"
+  resolved "https://registry.yarnpkg.com/recheck-linux-x64/-/recheck-linux-x64-4.4.5.tgz#ea2ad36c14a95d094298c8038ce4cdba9f313889"
+  integrity sha512-s8OVPCpiSGw+tLCxH3eei7Zp2AoL22kXqLmEtWXi0AnYNwfuTjZmeLn2aQjW8qhs8ZPSkxS7uRIRTeZqR5Fv/Q==
+
+recheck-macos-x64@4.4.5:
+  version "4.4.5"
+  resolved "https://registry.yarnpkg.com/recheck-macos-x64/-/recheck-macos-x64-4.4.5.tgz#5947a7d8f91b499a97a13518f72654bab497cf32"
+  integrity sha512-Ouup9JwwoKCDclt3Na8+/W2pVbt8FRpzjkDuyM32qTR2TOid1NI+P1GA6/VQAKEOjvaxgGjxhcP/WqAjN+EULA==
+
+recheck-windows-x64@4.4.5:
+  version "4.4.5"
+  resolved "https://registry.yarnpkg.com/recheck-windows-x64/-/recheck-windows-x64-4.4.5.tgz#a27643b7ad99ed5e9a6e697db82f1f07f59a9829"
+  integrity sha512-mkpzLHu9G9Ztjx8HssJh9k/Xm1d1d/4OoT7etHqFk+k1NGzISCRXBD22DqYF9w8+J4QEzTAoDf8icFt0IGhOEQ==
+
 recheck@^4.4.5:
   version "4.4.5"
   resolved "https://registry.npmjs.org/recheck/-/recheck-4.4.5.tgz"
@@ -484,7 +499,7 @@ type-is@~1.6.18:
     media-typer "0.3.0"
     mime-types "~2.1.24"
 
-unpipe@~1.0.0, unpipe@1.0.0:
+unpipe@1.0.0, unpipe@~1.0.0:
   version "1.0.0"
   resolved "https://registry.npmjs.org/unpipe/-/unpipe-1.0.0.tgz"
   integrity sha1-sr9O6FFKrmFltIF4KdIbLvSZBOw=
