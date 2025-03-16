@@ -1,4 +1,4 @@
-ReDoS HTTP API
+ReCheck HTTP API
 ==============
 
 Overview
@@ -23,8 +23,8 @@ You can run this project using Docker or directly with Node.js.
 ### Using Docker
 
 ```
-docker build -t redos-http-api .
-docker run -p 3001:3001 redos-http-api
+docker build -t recheck-http-api .
+docker run -p 3001:3001 recheck-http-api
 ```
 
 ### Using Node.js (Yarn)

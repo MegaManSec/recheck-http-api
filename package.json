@@ -1,13 +1,13 @@
 {
-  "name": "redos-http-api",
-  "version": "0.0.1",
+  "name": "recheck-http-api",
+  "version": "1.0.0",
   "description": "Express endpoint for checking regex expressions against ReDoS vulnerabilities",
   "main": "app.js",
-  "repository": "https://github.com/MegaManSec/redos-http-api",
+  "repository": "https://github.com/MegaManSec/recheck-http-api",
   "author": {
     "name": "Joshua Rogers"
   },
-  "homepage": "https://joshua.hu/regex-redos-nginx-gixy",
+  "homepage": "https://joshua.hu/regex-redos-recheck-nginx-gixy",
   "license": "GPL-3.0",
   "private": false,
   "scripts": {
