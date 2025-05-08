@@ -62,8 +62,8 @@ app.post("/recheck", async (req, res) => {
     const result = Object.create(null);
     const keys = Object.keys(req.body);
 
-    if (keys.length > 500) {
-        return res.status(400).json({ error: "Greater than 500 expressions" });
+    if (keys.length > MAX_CACHE_SIZE) {
+        return res.status(400).json({ error: `Greater than ${MAX_CACHE_SIZE} expressions` });
     }
 
     if (cache.size > MAX_CACHE_SIZE) {
@@ -84,7 +84,7 @@ app.post("/recheck", async (req, res) => {
                 const trimmedValue = pattern.trim();
                 const cacheKey = `${trimmedValue}::${modifier}`;
 
-                if (trimmedValue.length > 1000) {
+                if (trimmedValue.length > 5000) {
                     result[key] = null;
                     return;
                 }
